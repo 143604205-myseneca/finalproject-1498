@@ -1,7 +1,7 @@
-Scaling [--solutionname--] With Kubernetes
+Scaling [finalproject-1498] With Kubernetes
 ===========================
 
-Generated On: --datetime-- UTC
+Generated On: 2024-12-05 17:52:16 UTC
 
 You can scale your solution with Kubernetes.  To do so, will will need to apply the following YAML files to your Kubernetes cluster.
 
@@ -33,13 +33,13 @@ You can scale your solution with Kubernetes.  To do so, will will need to apply 
    sudo systemctl restart docker
 
 
-Based on your TML solution [--solutionname--] - if you want to scale your application with Kubernetes - you will need to apply the following YAML files.
+Based on your TML solution [finalproject-1498] - if you want to scale your application with Kubernetes - you will need to apply the following YAML files.
 
 .. list-table::
 
    * - **YML File**
      - **Description**
-   * - :ref:`--solutionnamefile--`
+   * - :ref:`finalproject-1498.yml`
      - This is your main solution YAML file.  
  
        It MUST be applied to your Kubernetes cluster.
@@ -72,13 +72,13 @@ kubectl Create command
 
 .. code-block:: YAML
 
-   --kubectl--
+   kubectl create -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f finalproject-1498.yml
 
---solutionnamefile--
+finalproject-1498.yml
 ------------------------
 
 .. important::
-   Copy and Paste this YAML file: --solutionnamefile-- - and save it locally.
+   Copy and Paste this YAML file: finalproject-1498.yml - and save it locally.
 
 .. attention::
 
@@ -98,8 +98,110 @@ kubectl Create command
 
 .. code-block:: YAML
 
-   ################# --solutionnamefile--
-   --solutionnamecode--
+   ################# finalproject-1498.yml
+   
+     apiVersion: apps/v1
+     kind: Deployment
+     metadata:
+       name: finalproject-1498
+     spec:
+       selector:
+         matchLabels:
+           app: finalproject-1498
+       replicas: 3 # tells deployment to run 1 pods matching the template
+       template:
+         metadata:
+           labels:
+             app: finalproject-1498
+         spec:
+           containers:
+           - name: finalproject-1498
+             image: skandhare@myseneca.ca/finalproject-1498-amd64:latest
+             volumeMounts:
+             - name: dockerpath
+               mountPath: /var/run/docker.sock
+             ports:
+             - containerPort: 8883
+             - containerPort: 60679
+             - containerPort: 33247
+             - containerPort: 53803
+             env:
+             - name: TSS
+               value: '0'
+             - name: SOLUTIONNAME
+               value: 'finalproject-1498'
+             - name: SOLUTIONDAG
+               value: 'solution_preprocessing_ai_mqtt_dag-finalproject-1498'
+             - name: GITUSERNAME
+               value: '143604205-myseneca'
+             - name: GITREPOURL
+               value: 'https://github.com/143604205-myseneca/raspberrypi'
+             - name: SOLUTIONEXTERNALPORT
+               value: '53803'
+             - name: CHIP
+               value: 'amd64'
+             - name: SOLUTIONAIRFLOWPORT
+               value: '60679'
+             - name: SOLUTIONVIPERVIZPORT
+               value: '33247'
+             - name: DOCKERUSERNAME
+               value: 'skandhare@myseneca.ca'
+             - name: CLIENTPORT
+               value: '8883'
+             - name: EXTERNALPORT
+               value: '32913'
+             - name: KAFKACLOUDUSERNAME
+               value: ''
+             - name: VIPERVIZPORT
+               value: '9005'
+             - name: MQTTUSERNAME
+               value: '143604205-myseneca'
+             - name: AIRFLOWPORT
+               value: '9000'
+             - name: GITPASSWORD
+               value: '<ENTER GITHUB PASSWORD>'
+             - name: KAFKACLOUDPASSWORD
+               value: '<Enter API secret>'
+             - name: MQTTPASSWORD
+               value: '<ENTER MQTT PASSWORD>'
+             - name: READTHEDOCS
+               value: '<ENTER READTHEDOCS TOKEN>'
+             - name: qip 
+               value: 'privategpt-service' # This is private GPT service in kubernetes
+             - name: KUBE
+               value: '1'
+           volumes: 
+           - name: dockerpath
+             hostPath:
+               path: /var/run/docker.sock
+   ---
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: finalproject-1498-service
+       labels:
+         app: finalproject-1498-service
+     spec:
+       type: NodePort #Exposes the service as a node ports
+       ports:
+       - port: 8883
+         name: p1
+         protocol: TCP
+         targetPort: 8883
+       - port: 60679
+         name: p2
+         protocol: TCP
+         targetPort: 60679
+       - port: 33247
+         name: p3
+         protocol: TCP
+         targetPort: 33247
+       - port: 53803
+         name: p4
+         protocol: TCP
+         targetPort: 53803
+       selector:
+         app: finalproject-1498
 
 .. tip::
 
@@ -356,13 +458,13 @@ To visualize the dashboard you need to forward ports to your solution **deployme
 
 .. code-block::
 
-   --kube-portforward--
+   kubectl port-forward deployment/finalproject-1498 33247:33247
 
 After you forward the ports then copy/paste the viusalization URL below and run your dashboard.
 
 .. code-block::
 
-   --visualizationurl--
+   http://localhost:33247/tml-cisco-network-privategpt-monitor.html?topic=cisco-network-preprocess,cisco-network-privategpt&offset=-1&groupid=&rollbackoffset=400&topictype=prediction&append=0&secure=1
 
 Kubernetes Pod Access Commands
 ---------------------
